@@ -1,0 +1,8 @@
+<todo-item
+  value="{{ name }}"
+  hx-trigger="todoitem#checked"
+  hx-post="/markCheck"
+  hx-vals="js:{id: {{ id }}+'' }"
+  hx-swap="outerHTML"
+  hx-ext="json-enc"
+></todo-item>

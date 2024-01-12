@@ -1,0 +1,48 @@
+<link href="../assets/css/output.css" rel="stylesheet" />
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+<script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+<script type="module" src="../assets/js/button.js"></script>
+<script type="module" src="../assets/js/todo_item.js"></script>
+<script type="module" src="../assets/js/todo.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
+<title>Todo App</title>
+
+<main class="p-4 items-center w-full h-full">
+  <h1 class="text-4xl dark:text-slate-800">Todo SSR Rust App</h1>
+<todo-app class="p-2 flex flex-col">
+  <form
+    hx-trigger="submit"
+    hx-post="/add"
+      hx-vals='js:{id: document.querySelectorAll("todo-item").length+1+"", "value": document.querySelector("input").value, "checked": document.querySelector("input").checked}'
+    hx-ext="json-enc"
+    hx-target="form"
+    hx-swap="afterend"
+  >
+  <div class="p-2 flex flex-row gap-4">
+    <input placeholder="Add Todo" class="w-full p-2 border-none outline-none rounded-md"></input>
+    <button type="submit" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none">Submit</button>
+    </form>
+</div>
+      <div clas="flex flex-col gap-2">
+      {% for item in todos %}
+    <todo-item 
+        value="{{ item.value }}"
+        hx-trigger="todoitem#checked"
+        hx-post="/markCheck"
+        hx-swap="outerHTML"
+        hx-vals='js:{id: {{ item.id }}+""}'
+        hx-ext="json-enc"
+></todo-item>
+      {% endfor %}
+        </div>
+
+</todo-app>
+</main>
+<script>
+  document.addEventListener("todoitem#checked", (e) => {
+    console.log(e);
+  });
+</script>
